@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test</title>
+</head>
+<body>
+
+
+    <div></div>
+
+    <script>
+        
+        function convertToJson(res) {
+            if (res.ok) {
+                return res.json();
+            } else {
+                throw new Error("Bad Response");
+            }
+            }
+
+        function getData(category) {
+            return fetch(`public/json/${category}.json`)
+                .then(convertToJson)
+                .then((data) => data);
+            }
+
+         async function productList(category, selector) {
+            const elem = document.querySelector(selector);
+
+            const data = await getData(category);
+
+            elem.innerHtml = productCardTemplate(data);
+
+
+
+        }
+
+        function productCardTemplate(product) {
+            return `<li class="product-card">
+            <a href="product_pages/index.html?product=${product.Id}">
+            <img
+            src="${product.Image}"
+            alt="Image of ${product.Name}"
+            />
+            <h3 class="card__brand">${product.Brand.Name}</h3>
+            <h2 class="card__name">${product.NameWithoutBrand}</h2>
+            <p class="product-card__price">$${product.FinalPrice}</p></a>
+            </li>`
+        }
+
+            
+    </script>
+    
+</body>
+</html>
